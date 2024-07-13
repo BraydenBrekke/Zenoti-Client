@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "zenoti-client"
+name = "zenoti_client"
 version = "0.1.0"
 description = ""
 authors = ["Brayden Brekke <Braydenbrekke@live.com>"]
