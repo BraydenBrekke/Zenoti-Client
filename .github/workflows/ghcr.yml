@@ -12,13 +12,14 @@ name: Create and publish a Docker image
 on:
   push:
     branches: ["main"]
-    files:
+    paths:
       - "ZenotiClient.py"
 
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Build and publish to pypi
         uses: JRubics/poetry-publish@v2.0
         with:
