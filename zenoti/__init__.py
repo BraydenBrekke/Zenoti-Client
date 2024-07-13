@@ -30,7 +30,7 @@ class ZenotiGuest:
         self.height = height
 
 
-class ZenotiClient:
+class Zenoti:
     def __init__(
         self,
         default_employee_id,
