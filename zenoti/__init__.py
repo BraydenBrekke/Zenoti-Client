@@ -33,14 +33,12 @@ class ZenotiGuest:
 class Zenoti:
     def __init__(
         self,
-        default_employee_id,
         zenoti_username,
         zenoti_password,
         zenoti_token,
         zenoti_app_id,
     ):
         try:
-            self.default_employee_id = default_employee_id
             payload = json.dumps(
                 {
                     "account_name": "options",
@@ -319,7 +317,7 @@ class Zenoti:
         except requests.exceptions.RequestException as e:
             self.logger.error(e)
 
-    def create_membership(self, center_id, user_id, membership_id):
+    def create_membership(self, center_id, user_id, membership_id, default_employee_id):
         try:
             membership_invoice = requests.post(
                 "https://api.zenoti.com/v1/invoices/memberships",
@@ -333,7 +331,7 @@ class Zenoti:
                     "center_id": center_id,
                     "user_id": user_id,
                     "membership_ids": membership_id,
-                    "sale_by_id": self.default_employee_id,
+                    "sale_by_id": default_employee_id,
                 },
             ).json()
             return membership_invoice["invoice_id"]
