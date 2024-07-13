@@ -12,6 +12,8 @@ name: Create and publish a Docker image
 on:
   push:
     branches: ["main"]
+    files:
+      - "ZenotiClient.py"
 
 jobs:
   build_and_publish:
