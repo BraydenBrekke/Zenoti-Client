@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import date, timedelta
 import difflib
 import logging
 import requests
