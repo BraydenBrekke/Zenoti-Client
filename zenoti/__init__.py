@@ -62,7 +62,7 @@ class Zenoti:
         except requests.exceptions.RequestException as e:
             self.logger.error(e)
 
-    def get_guest_height(self, guest_id):
+    def get_guest_height(self, guest_id) ->:
         try:
             headers = {
                 "Authorization": f"Bearer {self.token}",
@@ -83,8 +83,7 @@ class Zenoti:
                     cm = round(h_inch * 2.54)
                     return cm
         except requests.exceptions.RequestException as e:
-            self.flask_app.logger.info(e)
-            return ""
+            return 0
 
     def get_guest_details_by_id(self, guest_id) -> ZenotiGuest:
         try:
