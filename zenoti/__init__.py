@@ -62,7 +62,7 @@ class Zenoti:
         except requests.exceptions.RequestException as e:
             self.logger.error(e)
 
-    def get_guest_height(self, guest_id) ->:
+    def get_guest_height(self, guest_id) -> int:
         try:
             headers = {
                 "Authorization": f"Bearer {self.token}",
