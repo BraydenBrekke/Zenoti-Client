@@ -82,7 +82,7 @@ class Zenoti:
                     h_inch = int(feet) * 12 + int(inches)
                     cm = round(h_inch * 2.54)
                     return cm
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             return 0
 
     def get_guest_details_by_id(self, guest_id) -> ZenotiGuest:
