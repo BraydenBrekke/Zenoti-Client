@@ -3,6 +3,7 @@ import difflib
 import logging
 import requests
 import json
+import boto3
 
 
 logger = logging.getLogger(__name__)
@@ -14,20 +15,24 @@ class ZenotiGuest:
         first_name: str,
         last_name: str,
         email: str,
+        age: int,
         phone: str,
         birthday: str,
         gender: str,
         center_name: str,
         height: int,
+        weight: int,
     ):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.age = age
         self.phone = phone
         self.birthday = birthday
         self.gender = gender
         self.center_name = center_name
         self.height = height
+        self.weight = weight
 
 
 class Zenoti:
@@ -85,6 +90,46 @@ class Zenoti:
         except Exception as e:
             return 0
 
+    def get_guest_weight(self, guest_id) -> float:
+        try:
+            headers = {
+                "Authorization": f"Bearer {self.token}",
+                "Content-Type": "application/json",
+            }
+            response = requests.request(
+                "GET",
+                f"https://api.zenoti.com/v1/Guests/{guest_id}/Forms",
+                headers=headers,
+            )
+            data = json.loads(response.json()["data"])
+            for row in data:
+                if row["name"] == "txtWeight":
+                    weight = row["value"]
+                    lbs = int(weight.split("lb")[0])
+                    kg = lbs * 0.454
+                    return kg
+        except Exception as e:
+            return 0
+
+    def get_guest_age(self, guest_id) -> int:
+        try:
+            headers = {
+                "Authorization": f"Bearer {self.token}",
+                "Content-Type": "application/json",
+            }
+            response = requests.request(
+                "GET",
+                f"https://api.zenoti.com/v1/Guests/{guest_id}/Forms",
+                headers=headers,
+            )
+            data = json.loads(response.json()["data"])
+            for row in data:
+                if row["name"] == "Age1":
+                    age = row["value"]
+                    return age
+        except Exception as e:
+            return 0
+
     def get_guest_details_by_id(self, guest_id) -> ZenotiGuest:
         try:
             headers = {
@@ -98,6 +143,8 @@ class Zenoti:
             )
 
             height = self.get_guest_height(guest_id)
+            weight = self.get_guest_weight(guest_id)
+            age = self.get_guest_age(guest_id)
 
             guest_object = response.json()
             personal_info = guest_object["personal_info"]
@@ -105,6 +152,7 @@ class Zenoti:
                 personal_info["first_name"],
                 personal_info["last_name"],
                 personal_info["email"],
+                age,
                 (
                     personal_info["mobile_phone"]["number"]
                     if personal_info["mobile_phone"]
@@ -118,10 +166,11 @@ class Zenoti:
                 "male" if personal_info["gender"] > 0 else "female",
                 guest_object["center_name"],
                 height,
+                weight,
             )
         except requests.exceptions.RequestException as e:
             self.flask_app.logger.info(e)
-            return ZenotiGuest("", "", "", "", "", "", "")
+            return ZenotiGuest("", "", "", 0, "", "", "", "", 0, 0)
 
     def apply_promo(self, invoice_id: str, center_id: str, shopify_promo: str):  # noqa
         try:
