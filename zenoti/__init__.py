@@ -88,9 +88,9 @@ class Zenoti:
                     cm = round(h_inch * 2.54)
                     return cm
         except Exception as e:
-            return 0
+            return 122
 
-    def get_guest_weight(self, guest_id) -> float:
+    def get_guest_weight(self, guest_id) -> int:
         try:
             headers = {
                 "Authorization": f"Bearer {self.token}",
@@ -106,7 +106,7 @@ class Zenoti:
                 if row["name"] == "txtWeight":
                     weight = row["value"]
                     lbs = int(weight.split("lb")[0])
-                    kg = lbs * 0.454
+                    kg = round(lbs * 0.454)
                     return kg
         except Exception as e:
             return 0
@@ -125,7 +125,7 @@ class Zenoti:
             data = json.loads(response.json()["data"])
             for row in data:
                 if row["name"] == "Age1":
-                    age = row["value"]
+                    age = int(row["value"])
                     return age
         except Exception as e:
             return 0
