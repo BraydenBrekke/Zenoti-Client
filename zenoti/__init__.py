@@ -500,3 +500,29 @@ class Zenoti:
                     return product
         except requests.exceptions.RequestException as e:
             self.logger.error(e)
+
+    def get_locations(self):
+        try:
+            response = requests.get(
+                "https://api.zenoti.com/v1/centers",
+                headers={
+                    "accept": "application/json",
+                    "Authorization": f"bearer {self.token}",
+                },
+            )
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error(e)
+    
+    def get_location(self, center_id):
+        try:
+            response = requests.get(
+                f"https://api.zenoti.com/v1/centers/{center_id}",
+                headers={
+                    "accept": "application/json",
+                    "Authorization": f"bearer {self.token}",
+                },
+            )
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error(e)
