@@ -423,7 +423,10 @@ class Zenoti:
                         "first_name": order.first_name,
                         "last_name": order.last_name,
                         "email": order.email,
-                        "mobile_phone": order.phone.split(" ")[1].replace("-", ""),
+                        "mobile_phone": {
+                            "country_code": order.phone.split(" ")[0],
+                            "number": order.phone.split(" ")[1].replace("-", ""),
+                        },
                     },
                 },
                 headers={
@@ -514,7 +517,7 @@ class Zenoti:
             return response.json()
         except requests.exceptions.RequestException as e:
             self.logger.error(e)
-    
+
     def get_location(self, center_id):
         try:
             response = requests.get(
