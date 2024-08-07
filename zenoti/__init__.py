@@ -422,7 +422,7 @@ class Zenoti:
                         "first_name": order.first_name,
                         "last_name": order.last_name,
                         "email": order.email,
-                        "phone": order.phone,
+                        "mobile_phone": order.phone,
                     },
                 },
                 headers={
