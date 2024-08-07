@@ -296,8 +296,9 @@ class Zenoti:
 
     def get_existing_guest_info_by_phone(self, order):
         try:
+            clean_phone = order.phone.replace(" ", "").replace("-", "")
             return requests.get(
-                f"https://api.zenoti.com/v1/guests/search?phone={order.phone}&expand=primary_employee",  # noqa
+                f"https://api.zenoti.com/v1/guests/search?phone={clean_phone}&expand=primary_employee",  # noqa
                 headers={
                     "accept": "application/json",
                     "Authorization": f"bearer {self.token}",
@@ -422,7 +423,7 @@ class Zenoti:
                         "first_name": order.first_name,
                         "last_name": order.last_name,
                         "email": order.email,
-                        "mobile_phone": order.phone,
+                        "phone": order.phone,
                     },
                 },
                 headers={
