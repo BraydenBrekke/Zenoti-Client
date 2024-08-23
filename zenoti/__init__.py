@@ -415,20 +415,22 @@ class Zenoti:
 
     def create_guest(self, order):
         try:
+            guest_object = {
+                "center_id": order.center_id,
+                "personal_info": {
+                    "first_name": order.first_name,
+                    "last_name": order.last_name,
+                    "email": order.email,
+                },
+            }
+            if order.phone:
+                guest_object["personal_info"]["mobile_phone"] = {
+                    "country_code": order.phone.split(" ")[0],
+                    "number": order.phone.split(" ")[1].replace("-", ""),
+                }
             guest = requests.post(
                 "https://api.zenoti.com/v1/guests",
-                json={
-                    "center_id": order.center_id,
-                    "personal_info": {
-                        "first_name": order.first_name,
-                        "last_name": order.last_name,
-                        "email": order.email,
-                        "mobile_phone": {
-                            "country_code": order.phone.split(" ")[0],
-                            "number": order.phone.split(" ")[1].replace("-", ""),
-                        },
-                    },
-                },
+                json=guest_object,
                 headers={
                     "application_version": "1.0.0",
                     "Authorization": f"bearer {self.token}",
