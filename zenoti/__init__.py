@@ -294,7 +294,11 @@ class Zenoti:
 
     def get_existing_guest_info_by_phone(self, order):
         try:
-            clean_phone = order.phone.split(" ")[1].replace("-", "")
+            if " " in order.phone:
+                clean_phone = order.phone.split(" ")[1].replace("-", "")
+            else:
+                clean_phone = order.phone
+
             return requests.get(
                 f"https://api.zenoti.com/v1/guests/search?phone={clean_phone}&expand=primary_employee",  # noqa
                 headers={
