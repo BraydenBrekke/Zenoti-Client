@@ -6,9 +6,6 @@ import json
 import boto3
 
 
-logger = logging.getLogger(__name__)
-
-
 class ZenotiGuest:
     def __init__(
         self,
@@ -64,6 +61,7 @@ class Zenoti:
                 data=payload,  # noqa
             ).json()["credentials"]["access_token"]
             self.token = token
+            self.logger = logging.getLogger(__name__)
         except requests.exceptions.RequestException as e:
             self.logger.error(e)
 
