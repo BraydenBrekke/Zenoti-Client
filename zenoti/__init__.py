@@ -303,9 +303,10 @@ class Zenoti:
                     "accept": "application/json",
                     "Authorization": f"bearer {self.token}",
                 },
-            )
-        except requests.exceptions.RequestException as e:
+            ).json()
+        except Exception as e:
             self.logger.error(e)
+            return {}
 
     def get_existing_guest_info_by_email(self, order):
         try:
@@ -315,9 +316,10 @@ class Zenoti:
                     "accept": "application/json",
                     "Authorization": f"bearer {self.token}",
                 },
-            )
-        except requests.exceptions.RequestException as e:
+            ).json()
+        except Exception as e:
             self.logger.error(e)
+            return {}
 
     def get_zenoti_product_id_from_sku(self, center: str, sku: str) -> str:  # noqa
         try:
