@@ -294,21 +294,15 @@ class Zenoti:
 
     def get_existing_guest_info_by_phone(self, order):
         try:
-            if " " in order.phone:
-                clean_phone = order.phone.split(" ")[1].replace("-", "")
-            else:
-                clean_phone = order.phone
-
             return requests.get(
-                f"https://api.zenoti.com/v1/guests/search?phone={clean_phone}&expand=primary_employee",  # noqa
+                f"https://api.zenoti.com/v1/guests/search?phone={order.phone}&expand=primary_employee",  # noqa
                 headers={
                     "accept": "application/json",
                     "Authorization": f"bearer {self.token}",
                 },
-            ).json()
-        except Exception as e:
+            )
+        except requests.exceptions.RequestException as e:
             self.logger.error(e)
-            return {}
 
     def get_existing_guest_info_by_email(self, order):
         try:
@@ -425,13 +419,9 @@ class Zenoti:
                     "first_name": order.first_name,
                     "last_name": order.last_name,
                     "email": order.email,
+                    "phone": order.phone
                 },
             }
-            if order.phone:
-                guest_object["personal_info"]["mobile_phone"] = {
-                    "country_code": order.phone.split(" ")[0],
-                    "number": order.phone.split(" ")[1].replace("-", ""),
-                }
             guest = requests.post(
                 "https://api.zenoti.com/v1/guests",
                 json=guest_object,
