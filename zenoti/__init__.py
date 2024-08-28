@@ -413,13 +413,18 @@ class Zenoti:
 
     def create_guest(self, order):
         try:
+            if len(order.phone) == 11:
+                order.phone = order.phone[1:]
             guest_object = {
                 "center_id": order.center_id,
                 "personal_info": {
                     "first_name": order.first_name,
                     "last_name": order.last_name,
                     "email": order.email,
-                    "phone": order.phone
+                    "mobile_phone": {
+                        "country_code": 225,
+                        "number": order.phone
+                    } 
                 },
             }
             guest = requests.post(
